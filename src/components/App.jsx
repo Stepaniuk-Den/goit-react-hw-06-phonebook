@@ -1,44 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ContactForm } from './ContactForm/ContactForm';
 import Section from './Section/Section';
-import { nanoid } from 'nanoid';
 import ContactList from './ContactList/ContactList';
 import { FilterBar } from './FilterContact/FilterBar';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addContact,
+  filterContact,
+  removeContact,
+} from 'redux/contactsReducer';
 
 export const App = () => {
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
-
-  useEffect(() => {
-    const contacts = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(contacts) ?? [];
-    setContacts(parsedContacts.length ? parsedContacts : []);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
+  const contacts = useSelector(state => state.contacts.contacts);
+  const filter = useSelector(state => state.contacts.filter);
+  const dispatch = useDispatch();
 
   const onAddContact = contactData => {
-    const contact = {
-      id: nanoid(),
-      ...contactData,
-    };
-    setContacts(prevState => [contact, ...prevState]);
+    dispatch(addContact(contactData));
   };
 
   const onDublicate = dublicated => {
     const dublicate = contacts.filter(contact => contact.name === dublicated);
     return dublicate.length > 0;
   };
-  const onFilter = filtered => {
-    setFilter(filtered);
+
+  const onFilter = filterValue => {
+    dispatch(filterContact(filterValue));
   };
 
   const onRemoveContact = contactId => {
-    setContacts(prevState =>
-      prevState.filter(contact => contact.id !== contactId)
-    );
+    dispatch(removeContact(contactId));
   };
 
   const filteredContact = contacts.filter(contact =>

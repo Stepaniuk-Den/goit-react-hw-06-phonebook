@@ -23,7 +23,6 @@ export const ContactForm = ({ onAddContact, onDublicate }) => {
     isDublicate
       ? alert(`Attention! Name ${name} is already!`)
       : onAddContact(contactData);
-    e.target.reset();
     setName('');
     setNumber('');
   };
