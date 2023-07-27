@@ -15,6 +15,7 @@ import { contactsReducer } from './contactsReducer';
 const contactsPersistConfig = {
   key: 'contacts',
   storage,
+  whitelist: 'contacts',
 };
 
 export const store = configureStore({
